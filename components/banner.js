@@ -49,6 +49,10 @@ const PlayBtn = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  &:hover {
+    opacity: 0.5;
+  }
 `;
 
 const InfoBtn = styled.div`
@@ -64,9 +68,60 @@ const InfoBtn = styled.div`
   align-items: center;
 `;
 
+const VideoContainer = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Iframe = styled.iframe`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.65;
+  border: none;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+`;
+
+const VideoCancelBtn = styled.button`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 16px;
+  border: none;
+  background-color: transparent;
+  color: white;
+  font-size: 50px;
+  opacity: 0.2;
+  transition: opacity 0.4s ease;
+
+  &:hover {
+    opacity: 1;
+  }
+`;
 export default function Banner() {
   const [movie, setMovie] = useState([]);
   const [background, setBackground] = useState("");
+
+  // 비디오
+  const [isClicked, setIsClicked] = useState(false);
+
+  const handlePlayBtn = () => {
+    setIsClicked(true);
+  };
 
   useEffect(() => {
     fetchMovie();
@@ -86,6 +141,7 @@ export default function Banner() {
       setBackground(
         "https://image.tmdb.org/t/p/original/" + data.backdrop_path
       );
+      console.log(data);
     } catch (err) {
       console.log(err);
     }
@@ -96,18 +152,29 @@ export default function Banner() {
     return filterdStr;
   };
 
-  return (
-    <BannerContainer background={background}>
-      <BannerSection>
-        <MovieTitle>{movie.title || movie.original_title}</MovieTitle>
-        <ButtonWrapper>
-          <PlayBtn>Play</PlayBtn>
-          <InfoBtn>More Information</InfoBtn>
-        </ButtonWrapper>
-        <MovieDescription>{strFilter(movie.overview, 100)}</MovieDescription>
-      </BannerSection>
-    </BannerContainer>
-  );
+  if (!isClicked) {
+    return (
+      <BannerContainer background={background}>
+        <BannerSection>
+          <MovieTitle>{movie.title || movie.original_title}</MovieTitle>
+          <ButtonWrapper>
+            <PlayBtn onClick={handlePlayBtn}>Play</PlayBtn>
+            <InfoBtn>More Information</InfoBtn>
+          </ButtonWrapper>
+          <MovieDescription>{strFilter(movie.overview, 100)}</MovieDescription>
+        </BannerSection>
+      </BannerContainer>
+    );
+  } else {
+    return (
+      <VideoContainer>
+        <Iframe
+          src={`http://youtube.com/embed/${movie.videos?.results[0]?.key}?controls=0&autoplay=1&loop=1&mute=0&playlist=${movie.videos?.results[0]?.key}`}
+        />
+        <VideoCancelBtn onClick={() => setIsClicked(false)}>x</VideoCancelBtn>
+      </VideoContainer>
+    );
+  }
 }
 
 // export async function getStaticProps() {
