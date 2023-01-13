@@ -1,4 +1,5 @@
 * {
   box-sizing: border-box;
-  height: 300vw;
+  margin: 0;
+  padding: 0;
 }

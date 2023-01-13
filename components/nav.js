@@ -10,7 +10,7 @@ const NavContainer = styled.nav`
   left: 0;
   z-index: 1;
   color: white;
-  background-color: ${(props) => (props.show === true ? "lightgray" : "black")};
+  background-color: ${(props) => (props.show === true ? "black" : "transparent")};
   transition: all 0.5s ease;
 `;
 
