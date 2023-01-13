@@ -141,7 +141,6 @@ export default function Banner() {
       setBackground(
         "https://image.tmdb.org/t/p/original/" + data.backdrop_path
       );
-      console.log(data);
     } catch (err) {
       console.log(err);
     }

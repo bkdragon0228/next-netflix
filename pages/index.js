@@ -3,6 +3,8 @@ import Image from "next/image";
 import { Inter } from "@next/font/google";
 import Nav from "../components/nav";
 import Banner from "../components/banner";
+import Row from "../components/row";
+import requests from "./api/requests";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,6 +19,24 @@ export default function Home() {
       </Head>
       <Nav />
       <Banner />
+      <Row
+        title="NEFLIX ORIGINAL"
+        id="NO"
+        fetchUrl={requests.fetchNetflixOriginals}
+        isLarge={true}
+      />
+      <Row title="Top Rated" id="TR" fetchUrl={requests.fetchTopRated} />
+      <Row title="Trending Now" id="TN" fetchUrl={requests.fetchTrending} />
+      <Row
+        title="Action Movies"
+        id="AN"
+        fetchUrl={requests.fetchActionMovies}
+      />
+      <Row
+        title="Comedy Movies"
+        id="CM"
+        fetchUrl={requests.fetchComedyMovies}
+      />
     </>
   );
 }
