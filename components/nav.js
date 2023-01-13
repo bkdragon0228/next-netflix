@@ -2,16 +2,48 @@ import styled from "@emotion/styled";
 import Image from "next/legacy/image";
 import { useEffect, useState } from "react";
 
+const breakpoints = [576, 768, 992, 1200];
+const mq = breakpoints.map((bp) => `@media screen and (min-width : ${bp}px)`);
+
 const NavContainer = styled.nav`
+  position: relative;
   width: 100%;
   height: 80px;
-  position: fixed;
-  top: 0;
-  left: 0;
   z-index: 1;
   color: white;
-  background-color: ${(props) => (props.show === true ? "black" : "transparent")};
   transition: all 0.5s ease;
+  background-color: black;
+
+  ${mq[3]} {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    background-color: ${(props) =>
+      props.show === true ? "black" : "transparent"};
+  }
+`;
+
+const NavMenu = styled.ul`
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  list-style: none;
+  display: flex;
+  column-gap: 16px;
+
+  & li {
+    cursor: pointer;
+  }
+
+  & li:hover {
+    opacity: 0.8;
+  }
+
+  ${mq[3]} {
+    display: none;
+  }
 `;
 
 const NavLogo = styled.div`
@@ -59,6 +91,13 @@ export default function Nav() {
           onClick={() => window.location.reload()}
         />
       </NavLogo>
+
+      <NavMenu>
+        <li>TV SHOW</li>
+        <li>MOVIE</li>
+        <li>MY LIST</li>
+        <li>MOST FAMOUS</li>
+      </NavMenu>
 
       <NavAvatar
         alt="user logged"

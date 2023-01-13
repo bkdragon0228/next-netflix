@@ -3,6 +3,9 @@ import styled from "@emotion/styled";
 import axios from "../pages/api/axios";
 import requests from "../pages/api/requests";
 
+const breakpoints = [576, 768, 992, 1200];
+const mq = breakpoints.map((bp) => `@media screen and (min-width : ${bp}px)`);
+
 const BannerContainer = styled.header`
   position: relative;
   width: 100%;
@@ -11,6 +14,11 @@ const BannerContainer = styled.header`
   background-image: url(${(props) => props.background});
   background-position: top center;
   background-size: cover;
+  display: none;
+
+  ${mq[3]} {
+    display: block;
+  }
 `;
 
 const BannerSection = styled.section`
