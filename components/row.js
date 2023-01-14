@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import React, { useState, useEffect } from "react";
 import axios from "../pages/api/axios";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 
 const RowContainer = styled.div`
   position: relative;
@@ -38,6 +39,7 @@ const MoviePoster = styled.div`
 const MovieSkelton = styled(MoviePoster)`
   box-sizing: border-box;
   position: relative;
+  overflow: hidden;
   background-image: none;
   background-color: lightgray;
   opacity: 0.3;
@@ -147,14 +149,13 @@ export default function Row({ title, id, fetchUrl, isLarge }) {
       </LeftArrow>
       <SlideContainer id={id}>
         {isLoading
-          ? new Array(10)
-              .fill(1)
-              .map((_, i) => (
-                <MovieSkelton
-                  key={i}
-                  isLarge={isLarge === true ? true : false}
-                />
-              ))
+          ? new Array(10).fill(1).map((_, i) => (
+              <div style={{ margin: "0 16px" }} key={i}>
+                <SkeletonTheme baseColor="#202020" highlightColor="#444">
+                  <Skeleton width="300px" height="400px" />
+                </SkeletonTheme>
+              </div>
+            ))
           : movies.map((movie) => (
               <MoviePoster
                 key={movie.id}
@@ -175,3 +176,22 @@ export default function Row({ title, id, fetchUrl, isLarge }) {
     </RowContainer>
   );
 }
+
+// {isLoading
+//   ? new Array(10)
+//       .fill(1)
+//       .map((_, i) => (
+//         <MovieSkelton
+//           key={i}
+//           isLarge={isLarge === true ? true : false}
+//         />
+//       ))
+//   : movies.map((movie) => (
+//       <MoviePoster
+//         key={movie.id}
+//         background={`https://image.tmdb.org/t/p/original/${
+//           isLarge ? movie.poster_path : movie.backdrop_path
+//         }`}
+//         isLarge={isLarge === true ? true : false}
+//       />
+//     ))}
