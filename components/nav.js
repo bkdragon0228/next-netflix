@@ -62,6 +62,18 @@ const NavAvatar = styled.div`
   cursor: pointer;
 `;
 
+const NavInput = styled.input`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 16px 20px;
+  border: none;
+  background-color: black;
+  color: white;
+  border-radius: 5px;
+`;
+
 export default function Nav() {
   const [show, setShow] = useState(false);
 
@@ -92,12 +104,14 @@ export default function Nav() {
         />
       </NavLogo>
 
-      <NavMenu>
+      {/* <NavMenu>
         <li>TV SHOW</li>
         <li>MOVIE</li>
         <li>MY LIST</li>
         <li>MOST FAMOUS</li>
-      </NavMenu>
+      </NavMenu> */}
+
+      <NavInput placeholder="영화를 검색해주세요." />
 
       <NavAvatar
         alt="user logged"
