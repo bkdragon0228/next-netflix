@@ -5,6 +5,7 @@ import Nav from "../components/nav";
 import Banner from "../components/banner";
 import Row from "../components/row";
 import requests from "./api/requests";
+import Footer from "../components/footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -37,6 +38,7 @@ export default function Home() {
         id="CM"
         fetchUrl={requests.fetchComedyMovies}
       />
+      <Footer />
     </>
   );
 }

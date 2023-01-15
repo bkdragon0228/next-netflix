@@ -127,7 +127,7 @@ export default function Row({ title, id, fetchUrl, isLarge }) {
 
   const fetchMovies = async () => {
     try {
-      await new Promise((r) => setTimeout(r, 3000)); // 3초 지연
+      // await new Promise((r) => setTimeout(r, 3000));
       const res = await axios.get(fetchUrl);
       setMovies(res.data.results);
       setIsLoading(false);
