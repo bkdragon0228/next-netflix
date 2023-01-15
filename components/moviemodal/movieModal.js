@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "@emotion/styled";
 
 const MovieModalContainer = styled.div`
@@ -70,9 +70,29 @@ export default function MovieModal({
   vote_average,
   setModalOpen,
 }) {
+  const ref = useRef();
+  console.log(ref);
+
+  useEffect(() => {
+    const listener = (e) => {
+      // 클릭한 부분이 ref에 포함되면
+      if (!ref.current || ref.current.contains(e.target)) {
+        return;
+      }
+      // 클릭한 부분이 ref에 포함되지 않으면, 즉 modal창 외부를 클릭하면
+      setModalOpen(false);
+    };
+    document.addEventListener("mousedown", listener);
+    document.addEventListener("touchstart", listener);
+    return () => {
+      document.removeEventListener("mousedown", listener);
+      document.removeEventListener("touchstart", listener);
+    };
+  }, []);
+
   return (
     <MovieModalContainer>
-      <MovieModalContent>
+      <MovieModalContent ref={ref}>
         <CancelBtn onClick={() => setModalOpen(false)}>X</CancelBtn>
         <MovieImage
           background={`https://image.tmdb.org/t/p/original/${backdrop_path}`}
