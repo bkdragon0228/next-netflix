@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import React, { useState, useEffect } from "react";
 import axios from "../pages/api/axios";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import MovieModal from "./moviemodal/movieModal";
 
 const RowContainer = styled.div`
   position: relative;
@@ -120,6 +121,8 @@ const LeftArrow = styled.div`
 export default function Row({ title, id, fetchUrl, isLarge }) {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [movieSelected, setMovieSelected] = useState({});
 
   useEffect(() => {
     fetchMovies();
@@ -134,6 +137,12 @@ export default function Row({ title, id, fetchUrl, isLarge }) {
     } catch (err) {
       throw err;
     }
+  };
+
+  const handleClick = (movie) => {
+    setModalOpen(true);
+    console.log(movie);
+    setMovieSelected(movie);
   };
 
   return (
@@ -163,6 +172,7 @@ export default function Row({ title, id, fetchUrl, isLarge }) {
                   isLarge ? movie.poster_path : movie.backdrop_path
                 }`}
                 isLarge={isLarge === true ? true : false}
+                onClick={() => handleClick(movie)}
               />
             ))}
       </SlideContainer>
@@ -173,6 +183,10 @@ export default function Row({ title, id, fetchUrl, isLarge }) {
       >
         {">"}
       </RightArrow>
+
+      {modalOpen && (
+        <MovieModal {...movieSelected} setModalOpen={setModalOpen} />
+      )}
     </RowContainer>
   );
 }
