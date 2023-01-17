@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "../pages/api/axios";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import MovieModal from "./moviemodal/movieModal";
+import { useQuery } from "react-query";
 
 const RowContainer = styled.div`
   position: relative;
@@ -120,23 +121,13 @@ const LeftArrow = styled.div`
 
 export default function Row({ title, id, fetchUrl, isLarge }) {
   const [movies, setMovies] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [movieSelected, setMovieSelected] = useState({});
 
-  useEffect(() => {
-    fetchMovies();
-  }, []);
-
   const fetchMovies = async () => {
-    try {
-      // await new Promise((r) => setTimeout(r, 3000));
-      const res = await axios.get(fetchUrl);
-      setMovies(res.data.results);
-      setIsLoading(false);
-    } catch (err) {
-      throw err;
-    }
+    const res = await axios.get(fetchUrl);
+
+    return res.data.results;
   };
 
   const handleClick = (movie) => {
@@ -144,6 +135,23 @@ export default function Row({ title, id, fetchUrl, isLarge }) {
     console.log(movie);
     setMovieSelected(movie);
   };
+
+  const { isLoading, data, isError } = useQuery(
+    ["getMovies", { movieId: id }],
+    fetchMovies,
+    {
+      onSuccess: (data) => {
+        setMovies(data);
+        console.log(movies);
+      },
+      enable: false,
+      retry: 0,
+    }
+  );
+
+  if (isError) {
+    alert("error");
+  }
 
   return (
     <RowContainer>

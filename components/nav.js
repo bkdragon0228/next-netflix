@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import Image from "next/legacy/image";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+import { useRouter } from "next/router";
 
 const breakpoints = [576, 768, 992, 1200];
 const mq = breakpoints.map((bp) => `@media screen and (min-width : ${bp}px)`);
@@ -76,6 +77,9 @@ const NavInput = styled.input`
 
 export default function Nav() {
   const [show, setShow] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
+  const [timerId, setTimerId] = useState(null);
+  const router = useRouter();
 
   useEffect(() => {
     window.addEventListener("scroll", () => {
@@ -91,6 +95,23 @@ export default function Nav() {
     };
   }, []);
 
+  const handleSearch = useCallback(() => {
+    // 검색을 수행하는 코드
+    router.push({
+      pathname: "/search",
+      query: { title: searchValue },
+    });
+  }, [searchValue]);
+
+  const handleChange = useCallback(
+    (e) => {
+      setSearchValue(e.target.value);
+      if (timerId) clearTimeout(timerId);
+      setTimerId(setTimeout(handleSearch, 2000));
+    },
+    [timerId]
+  );
+
   return (
     <NavContainer show={show}>
       <NavLogo>
@@ -100,7 +121,7 @@ export default function Nav() {
           objectFit="contain"
           alt="netflix logo"
           src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/170px-Netflix_2015_logo.svg.png"
-          onClick={() => window.location.reload()}
+          onClick={() => router.push("/")}
         />
       </NavLogo>
 
@@ -111,7 +132,12 @@ export default function Nav() {
         <li>MOST FAMOUS</li>
       </NavMenu> */}
 
-      <NavInput placeholder="영화를 검색해주세요." />
+      <NavInput
+        placeholder="영화를 검색해주세요."
+        // value={searchValue}
+        onChange={handleChange}
+        type="text"
+      />
 
       <NavAvatar
         alt="user logged"
