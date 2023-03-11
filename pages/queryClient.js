@@ -6,14 +6,20 @@ export const getQueryClient = (() => {
   return () => {
     if (!client)
       client = new QueryClient({
-        queryCache: new QueryCache({
-          onError: (error, query) => {
-            console.log("onError", error);
+        defaultOptions: {
+          queries: {
+            retry: 0,
+            refetchOnWindowFocus: false,
           },
-          onSuccess: (data) => {
-            console.log("onSuccess", data);
-          },
-        }),
+        },
+        // queryCache: new QueryCache({
+        //   onError: (error, query) => {
+        //     console.log("onError", error);
+        //   },
+        //   onSuccess: (data) => {
+        //     console.log("onSuccess", data);
+        //   },
+        // }),
       });
     return client;
   };

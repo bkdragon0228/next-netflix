@@ -1,9 +1,8 @@
 import styled from "@emotion/styled";
-import React, { useState, useEffect } from "react";
-import axios from "../pages/api/axios";
+import React, { useEffect, useState } from "react";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-import MovieModal from "./moviemodal/movieModal";
-import { useQuery } from "react-query";
+import MovieModal from "../modal/movieModal";
+import { useFetchMovies } from "../../hooks/useFetchMovie";
 
 const RowContainer = styled.div`
   position: relative;
@@ -25,8 +24,8 @@ const SlideContainer = styled.div`
 `;
 
 const MoviePoster = styled.div`
-  width: ${(props) => (props.isLarge ? "300px" : "400px")};
-  height: ${(props) => (props.isLarge ? "400px" : "200px")};
+  width: ${(props) => (props.size === "large" ? "300px" : "400px")};
+  height: ${(props) => (props.size === "large" ? "400px" : "200px")};
   background-image: url(${(props) => props.background});
   background-repeat: no-repeat;
   background-size: contain;
@@ -120,37 +119,18 @@ const LeftArrow = styled.div`
 `;
 
 export default function Row({ title, id, fetchUrl, isLarge }) {
-  const [movies, setMovies] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [movieSelected, setMovieSelected] = useState({});
 
-  const fetchMovies = async () => {
-    const res = await axios.get(fetchUrl);
-
-    return res.data.results;
-  };
-
   const handleClick = (movie) => {
     setModalOpen(true);
-    console.log(movie);
     setMovieSelected(movie);
   };
 
-  const { isLoading, data, isError } = useQuery(
-    ["getMovies", { movieId: id }],
-    fetchMovies,
-    {
-      onSuccess: (data) => {
-        setMovies(data);
-        console.log(movies);
-      },
-      enable: false,
-      retry: 0,
-    }
-  );
+  const { isLoading, data: movies, isError } = useFetchMovies(fetchUrl, id);
 
   if (isError) {
-    alert("error");
+    return <div>Error...</div>;
   }
 
   return (
@@ -179,7 +159,7 @@ export default function Row({ title, id, fetchUrl, isLarge }) {
                 background={`https://image.tmdb.org/t/p/original/${
                   isLarge ? movie.poster_path : movie.backdrop_path
                 }`}
-                isLarge={isLarge === true ? true : false}
+                size={isLarge ? "large" : "small"}
                 onClick={() => handleClick(movie)}
               />
             ))}
@@ -198,22 +178,3 @@ export default function Row({ title, id, fetchUrl, isLarge }) {
     </RowContainer>
   );
 }
-
-// {isLoading
-//   ? new Array(10)
-//       .fill(1)
-//       .map((_, i) => (
-//         <MovieSkelton
-//           key={i}
-//           isLarge={isLarge === true ? true : false}
-//         />
-//       ))
-//   : movies.map((movie) => (
-//       <MoviePoster
-//         key={movie.id}
-//         background={`https://image.tmdb.org/t/p/original/${
-//           isLarge ? movie.poster_path : movie.backdrop_path
-//         }`}
-//         isLarge={isLarge === true ? true : false}
-//       />
-//     ))}

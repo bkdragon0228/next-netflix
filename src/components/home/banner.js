@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
-import axios from "../pages/api/axios";
-import requests from "../pages/api/requests";
+import axios from "../../../pages/api/axios";
+import requests from "../../../pages/api/requests";
 
 const breakpoints = [576, 768, 992, 1200];
 const mq = breakpoints.map((bp) => `@media screen and (min-width : ${bp}px)`);
@@ -183,16 +183,3 @@ export default function Banner() {
     );
   }
 }
-
-// export async function getStaticProps() {
-//   try {
-//     const res = await axios.get(requests.fetchNowPlaying);
-
-//     console.log(res);
-//     return {
-//       props: { res },
-//     };
-//   } catch (err) {
-//     console.log(err);
-//   }
-// }

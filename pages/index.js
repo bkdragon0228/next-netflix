@@ -1,14 +1,10 @@
 import Head from "next/head";
-import Image from "next/image";
-import { Inter } from "@next/font/google";
-import Nav from "../components/nav";
-import Banner from "../components/banner";
-import Row from "../components/row";
+import Banner from "../src/components/home/banner";
+import Row from "../src/components/home/row";
 import requests from "./api/requests";
-import Footer from "../components/footer";
-import Layout from "../components/layout";
-
-const inter = Inter({ subsets: ["latin"] });
+import Layout from "../src/components/layout/layout";
+import { dehydrate, QueryClient, useQuery } from "react-query";
+import { fetchMovies } from "../src/hooks/useFetchMovie";
 
 export default function Home() {
   return (
@@ -27,17 +23,29 @@ export default function Home() {
           fetchUrl={requests.fetchNetflixOriginals}
           isLarge={true}
         />
-        <Row title="Top Rated" id="TR" fetchUrl={requests.fetchTopRated} />
-        <Row title="Trending Now" id="TN" fetchUrl={requests.fetchTrending} />
+        <Row
+          title="Top Rated"
+          id="TR"
+          fetchUrl={requests.fetchTopRated}
+          isLarge={false}
+        />
+        <Row
+          title="Trending Now"
+          id="TN"
+          fetchUrl={requests.fetchTrending}
+          isLarge={false}
+        />
         <Row
           title="Action Movies"
           id="AN"
           fetchUrl={requests.fetchActionMovies}
+          isLarge={false}
         />
         <Row
           title="Comedy Movies"
           id="CM"
           fetchUrl={requests.fetchComedyMovies}
+          isLarge={false}
         />
       </Layout>
     </>
