@@ -9,7 +9,7 @@ export default function MovieModal({
   vote_average,
   setModalOpen,
 }) {
-  const ref = useRef();
+  const ref = useRef(null);
   console.log(ref);
 
   useEffect(() => {
